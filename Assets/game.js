@@ -5,7 +5,7 @@ var losses = 0;
 
 var lettersGuessed = [];
 
-var guessesLeft = 8;
+var guessesLeft = 9;
 
 var computerLetter = computerChoices[(Math.floor(Math.random() * computerChoices.length))];
 
@@ -13,49 +13,63 @@ var pickLetter = function () {
     return computerLetter = computerChoices[(Math.floor(Math.random() * computerChoices.length))];
 }
 
-document.onkeyup = function (event) {
-    const userGuess = event.key.toLowerCase();
-
-
-
+var printInfo = function () {
     document.getElementById('remaining').textContent = `Guesses Left: ${guessesLeft}`;
 
     document.getElementById('winLine').textContent = `Wins: ${wins}`;
     document.getElementById('lossLine').textContent = `Losses: ${losses}`;
+    document.getElementById('Guesses').textContent = `Your Guesses so Far: ${lettersGuessed}`;
+
+}
+
+document.onkeyup = function (event) {
+    const userGuess = event.key.toLowerCase();
+
+    guessesLeft--;
+    lettersGuessed.push(userGuess);
 
 
-    for (i = 0; lettersGuessed.length < 9; i++) {
 
 
-        guessesLeft--;
-        lettersGuessed.push(userGuess);
+    for (i = 0; lettersGuessed.length < 10; i++) {
+
+
+
         console.log(computerLetter)
-        console.log(wins);
+
 
         if (userGuess === computerLetter) {
             wins++;
-            lettersGuessed = [];
-            alert('That is right! I was thinking of ' + computerLetter.toString().toUpperCase());
-            pickLetter();
-            return guessesLeft = 8;
 
-        } else if (guessesLeft === -1) {
-            document.getElementById('Guesses').textContent = `Your Guesses so Far: ${lettersGuessed.toString(' ')}  `;
+            guessesLeft = 9;
+
+            alert('That is right! I was thinking of ' + computerLetter.toString().toUpperCase());
+            lettersGuessed = [];
+            printInfo();
+            pickLetter();
+
+
+
+        } else if (guessesLeft === 0) {
             losses++;
+            lettersGuessed = [];
+            guessesLeft = 9;
+            printInfo();
             var gameOver = confirm('Game Over. Play Again?');
 
         } else {
-            return document.getElementById('Guesses').textContent = `Your Guesses so Far: ${lettersGuessed.toString(' ')}  `;
+            return printInfo();
         };
 
         if (gameOver === true) {
-            lettersGuessed = [];
+
             pickLetter();
-            return guessesLeft = 8;
+
+
         }
 
 
 
     }
-    console.log(wins);
+
 }
